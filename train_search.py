@@ -141,7 +141,7 @@ def train(train_queue, valid_queue, model, architect, criterion, optimizer, lr,e
     model.train()
     n = input.size(0)
     input = Variable(input, requires_grad=False).cuda()
-    target = Variable(target, requires_grad=False).cuda(async=True)
+    target = Variable(target, requires_grad=False).cuda(non_blocking=True)
 
     # get a random minibatch from the search queue with replacement
     input_search, target_search = next(iter(valid_queue))
@@ -151,7 +151,7 @@ def train(train_queue, valid_queue, model, architect, criterion, optimizer, lr,e
     #  valid_queue_iter = iter(valid_queue)
     #  input_search, target_search = next(valid_queue_iter)
     input_search = Variable(input_search, requires_grad=False).cuda()
-    target_search = Variable(target_search, requires_grad=False).cuda(async=True)
+    target_search = Variable(target_search, requires_grad=False).cuda(non_blocking=True)
 
     if epoch>=15:
       architect.step(input, target, input_search, target_search, lr, optimizer, unrolled=args.unrolled)
@@ -185,7 +185,7 @@ def infer(valid_queue, model, criterion):
     #input = input.cuda()
     #target = target.cuda(non_blocking=True)
     input = Variable(input, volatile=True).cuda()
-    target = Variable(target, volatile=True).cuda(async=True)
+    target = Variable(target, volatile=True).cuda(non_blocking=True)
     logits = model(input)
     loss = criterion(logits, target)
 
