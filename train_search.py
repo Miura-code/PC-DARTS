@@ -12,6 +12,7 @@ import torch.utils
 import torch.nn.functional as F
 import torchvision.datasets as dset
 import torch.backends.cudnn as cudnn
+from tqdm import tqdm
 
 from torch.autograd import Variable
 from model_search import Network
@@ -109,7 +110,7 @@ def main():
 
   architect = Architect(model, args)
 
-  for epoch in range(args.epochs):
+  for epoch in tqdm(range(args.epochs)):
     scheduler.step()
     lr = scheduler.get_lr()[0]
     logging.info('epoch %d lr %e', epoch, lr)
