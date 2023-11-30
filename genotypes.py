@@ -1,4 +1,7 @@
 from collections import namedtuple
+import torch
+import os
+import sys
 
 Genotype = namedtuple('Genotype', 'normal normal_concat reduce reduce_concat')
 
@@ -101,6 +104,6 @@ PC_DARTS_cifar = Genotype(
 )
 PC_DARTS_image = Genotype(normal=[('skip_connect', 1), ('sep_conv_3x3', 0), ('sep_conv_3x3', 0), ('skip_connect', 1), ('sep_conv_3x3', 1), ('sep_conv_3x3', 3), ('sep_conv_3x3', 1), ('dil_conv_5x5', 4)], normal_concat=range(2, 6), reduce=[('sep_conv_3x3', 0), ('skip_connect', 1), ('dil_conv_5x5', 2), ('max_pool_3x3', 1), ('sep_conv_3x3', 2), ('sep_conv_3x3', 1), ('sep_conv_5x5', 0), ('sep_conv_3x3', 3)], reduce_concat=range(2, 6))
 
-
 PCDARTS = PC_DARTS_cifar
 
+SEARCHED = torch.load("../genotype.pt") if os.path.isfile("../genotype.pt") else sys.exit(1)
