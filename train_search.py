@@ -117,7 +117,6 @@ def main():
 
     genotype = model.genotype()
     logging.info('genotype = %s', genotype)
-    input()
     #print(F.softmax(model.alphas_normal, dim=-1))
     #print(F.softmax(model.alphas_reduce, dim=-1))
 
@@ -131,6 +130,8 @@ def main():
       logging.info('valid_acc %f', valid_acc)
 
     utils.save(model, os.path.join(args.save, 'weights.pt'))
+    utils.save_genotype(genotype, os.path.join(args.save, 'genotype.pt'))
+    logging.info('model saved at' % args.save)
 
 
 def train(train_queue, valid_queue, model, architect, criterion, optimizer, lr,epoch):
