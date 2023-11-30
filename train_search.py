@@ -117,7 +117,7 @@ def main():
 
     genotype = model.genotype()
     logging.info('genotype = %s', genotype)
-
+    input()
     #print(F.softmax(model.alphas_normal, dim=-1))
     #print(F.softmax(model.alphas_reduce, dim=-1))
 

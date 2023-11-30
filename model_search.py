@@ -81,10 +81,16 @@ class Cell(nn.Module):
 
     states = [s0, s1]
     offset = 0
+    """ 各内部ノードに対して演算結果を足し合わせる。
+    Edge Normalizationを行う。
+    eq:2 in paper"""
     for i in range(self._steps):
       s = sum(weights2[offset+j]*self._ops[offset+j](h, weights[offset+j]) for j, h in enumerate(states))
       offset += len(states)
       states.append(s)
+
+    print(len(states))
+    input()
 
     return torch.cat(states[-self._multiplier:], dim=1)
 
@@ -133,6 +139,7 @@ class Network(nn.Module):
 
   def forward(self, input):
     s0 = s1 = self.stem(input)
+    print(s0.shape, s1.shape)
     for i, cell in enumerate(self.cells):
       if cell.reduction:
         weights = F.softmax(self.alphas_reduce, dim=-1)
@@ -166,8 +173,13 @@ class Network(nn.Module):
     return self._criterion(logits, target) 
 
   def _initialize_alphas(self):
+    """ arch パラメータalpha,betaを初期化
+        k:セル内のエッジの数
+        num_ops:候補演算の数
+    """
     k = sum(1 for i in range(self._steps) for n in range(2+i))
     num_ops = len(PRIMITIVES)
+    print("k,num_ops:", k, num_ops)
 
     self.alphas_normal = Variable(1e-3*torch.randn(k, num_ops).cuda(), requires_grad=True)
     self.alphas_reduce = Variable(1e-3*torch.randn(k, num_ops).cuda(), requires_grad=True)
@@ -186,6 +198,9 @@ class Network(nn.Module):
   def genotype(self):
 
     def _parse(weights,weights2):
+      # print("weights:", weights.shape)
+      # >> "weights: (14, 8)"
+
       gene = []
       n = 2
       start = 0
@@ -208,6 +223,7 @@ class Network(nn.Module):
         start = end
         n += 1
       return gene
+    
     n = 3
     start = 2
     weightsr2 = F.softmax(self.betas_reduce[0:2], dim=-1)
@@ -220,7 +236,11 @@ class Network(nn.Module):
       n += 1
       weightsr2 = torch.cat([weightsr2,tw2],dim=0)
       weightsn2 = torch.cat([weightsn2,tn2],dim=0)
+
+    print("alpha_normal:", self.alphas_normal.shape)
+    print("alpha_reduce:", self.alphas_reduce.shape)
     gene_normal = _parse(F.softmax(self.alphas_normal, dim=-1).data.cpu().numpy(),weightsn2.data.cpu().numpy())
+    input()
     gene_reduce = _parse(F.softmax(self.alphas_reduce, dim=-1).data.cpu().numpy(),weightsr2.data.cpu().numpy())
 
     concat = range(2+self._steps-self._multiplier, self._steps+2)

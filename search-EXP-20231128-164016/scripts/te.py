@@ -71,6 +71,11 @@ def main():
 
   genotype = eval("genotypes.%s" % args.arch)
   model = Network(args.init_channels, CIFAR_CLASSES, args.layers, args.auxiliary, genotype)
+
+  utils.load(model, "../weights.pt")
+  print(model)
+  input()
+
   model = model.cuda()
   print("genotype:", genotype)
   # print("model:", model.cells)

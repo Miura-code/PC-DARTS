@@ -132,6 +132,8 @@ class NetworkCIFAR(nn.Module):
       else:
         reduction = False
       cell = Cell(genotype, C_prev_prev, C_prev, C_curr, reduction, reduction_prev)
+      # print("cell:", cell)
+      # input()
       reduction_prev = reduction
       self.cells += [cell]
       C_prev_prev, C_prev = C_prev, cell.multiplier*C_curr
