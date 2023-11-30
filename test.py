@@ -17,7 +17,7 @@ from model import NetworkCIFAR as Network
 
 
 parser = argparse.ArgumentParser("cifar")
-parser.add_argument('--data', type=str, default='../data', help='location of the data corpus')
+parser.add_argument('--data', type=str, default='/home/miura/lab/data', help='location of the data corpus')
 parser.add_argument('--batch_size', type=int, default=96, help='batch size')
 parser.add_argument('--report_freq', type=float, default=50, help='report frequency')
 parser.add_argument('--gpu', type=int, default=0, help='gpu device id')
@@ -82,7 +82,7 @@ def infer(test_queue, model, criterion):
 
   for step, (input, target) in enumerate(test_queue):
     input = Variable(input, volatile=True).cuda()
-    target = Variable(target, volatile=True).cuda(async=True)
+    target = Variable(target, volatile=True).cuda(non_blocking=True)
 
     logits, _ = model(input)
     loss = criterion(logits, target)
