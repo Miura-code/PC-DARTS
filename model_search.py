@@ -89,9 +89,6 @@ class Cell(nn.Module):
       offset += len(states)
       states.append(s)
 
-    print(len(states))
-    input()
-
     return torch.cat(states[-self._multiplier:], dim=1)
 
 
@@ -139,7 +136,6 @@ class Network(nn.Module):
 
   def forward(self, input):
     s0 = s1 = self.stem(input)
-    print(s0.shape, s1.shape)
     for i, cell in enumerate(self.cells):
       if cell.reduction:
         weights = F.softmax(self.alphas_reduce, dim=-1)
@@ -179,7 +175,6 @@ class Network(nn.Module):
     """
     k = sum(1 for i in range(self._steps) for n in range(2+i))
     num_ops = len(PRIMITIVES)
-    print("k,num_ops:", k, num_ops)
 
     self.alphas_normal = Variable(1e-3*torch.randn(k, num_ops).cuda(), requires_grad=True)
     self.alphas_reduce = Variable(1e-3*torch.randn(k, num_ops).cuda(), requires_grad=True)
@@ -237,10 +232,7 @@ class Network(nn.Module):
       weightsr2 = torch.cat([weightsr2,tw2],dim=0)
       weightsn2 = torch.cat([weightsn2,tn2],dim=0)
 
-    print("alpha_normal:", self.alphas_normal.shape)
-    print("alpha_reduce:", self.alphas_reduce.shape)
     gene_normal = _parse(F.softmax(self.alphas_normal, dim=-1).data.cpu().numpy(),weightsn2.data.cpu().numpy())
-    input()
     gene_reduce = _parse(F.softmax(self.alphas_reduce, dim=-1).data.cpu().numpy(),weightsr2.data.cpu().numpy())
 
     concat = range(2+self._steps-self._multiplier, self._steps+2)
