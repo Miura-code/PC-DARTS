@@ -70,6 +70,10 @@ def main():
   logging.info("args = %s", args)
 
   genotype = eval("genotypes.%s" % args.arch)
+  print('---------Genotype---------')
+  logging.info('genotype = %s', genotype)
+
+
   model = Network(args.init_channels, CIFAR_CLASSES, args.layers, args.auxiliary, genotype)
   model = model.cuda()
 
@@ -91,8 +95,6 @@ def main():
   else:
       train_data = dset.CIFAR10(root=args.data, train=True, download=True, transform=train_transform)
       valid_data = dset.CIFAR10(root=args.data, train=False, download=True, transform=valid_transform)
-  #train_data = dset.CIFAR10(root=args.data, train=True, download=True, transform=train_transform)
-  #valid_data = dset.CIFAR10(root=args.data, train=False, download=True, transform=valid_transform)
 
   train_queue = torch.utils.data.DataLoader(
       train_data, batch_size=args.batch_size, shuffle=True, pin_memory=True, num_workers=2)
@@ -101,7 +103,8 @@ def main():
       valid_data, batch_size=args.batch_size, shuffle=False, pin_memory=True, num_workers=2)
 
   scheduler = torch.optim.lr_scheduler.CosineAnnealingLR(optimizer, float(args.epochs))
-  best_acc = 0.0
+  best_acc_top1 = 0.0
+  best_acc_top5 = 0.0
   for epoch in range(args.epochs):
     scheduler.step()
     logging.info('epoch %d lr %e', epoch, scheduler.get_lr()[0])
@@ -110,13 +113,17 @@ def main():
     train_acc, train_obj = train(train_queue, model, criterion, optimizer)
     logging.info('train_acc %f', train_acc)
 
-    valid_acc, valid_obj = infer(valid_queue, model, criterion)
-    if valid_acc > best_acc:
-        best_acc = valid_acc
-    logging.info('valid_acc %f, best_acc %f', valid_acc, best_acc)
+    valid_acc_top1, valid_acc_top5, valid_obj = infer(valid_queue, model, criterion)
+    is_best = False
+    if valid_acc_top5 > best_acc_top5:
+        best_acc_top5 = valid_acc_top5
+    if valid_acc_top1 > best_acc_top1:
+        best_acc_top1 = valid_acc_top1
+        is_best = True
+    logging.info('valid_acc_top1 %f, valid_acc_top5 %f, best_acc_top1 %f', valid_acc_top1, valid_acc_top5, best_acc_top1)
 
     utils.save(model, os.path.join(args.save, 'weights.pt'))
-
+    logging.info('model saved at' % args.save)
 
 def train(train_queue, model, criterion, optimizer):
   objs = utils.AvgrageMeter()
@@ -159,9 +166,9 @@ def infer(valid_queue, model, criterion):
   for step, (input, target) in enumerate(valid_queue):
     input = Variable(input, volatile=True).cuda()
     target = Variable(target, volatile=True).cuda(non_blocking=True)
-
-    logits, _ = model(input)
-    loss = criterion(logits, target)
+    with torch.no_grad():
+      logits, _ = model(input)
+      loss = criterion(logits, target)
 
     prec1, prec5 = utils.accuracy(logits, target, topk=(1, 5))
     n = input.size(0)
@@ -172,7 +179,7 @@ def infer(valid_queue, model, criterion):
     if step % args.report_freq == 0:
       logging.info('valid %03d %e %f %f', step, objs.avg, top1.avg, top5.avg)
 
-  return top1.avg, objs.avg
+  return top1.avg, top5.avg, objs.avg
 
 
 if __name__ == '__main__':
