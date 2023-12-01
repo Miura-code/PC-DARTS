@@ -110,6 +110,8 @@ def main():
 
   architect = Architect(model, args)
 
+  best_acc_top1 = 0.0
+  best_acc_top5 = 0.0
   for epoch in tqdm(range(args.epochs)):
     scheduler.step()
     lr = scheduler.get_lr()[0]
@@ -124,9 +126,16 @@ def main():
 
     # validation
     if args.epochs-epoch<=1:
-      valid_acc, valid_obj = infer(valid_queue, model, criterion)
-      logging.info('valid_acc %f', valid_acc)
+      valid_acc_top1, valid_acc_top5, valid_obj = infer(valid_queue, model, criterion)
+      is_best = False
+      if valid_acc_top5 > best_acc_top5:
+          best_acc_top5 = valid_acc_top5
+      if valid_acc_top1 > best_acc_top1:
+          best_acc_top1 = valid_acc_top1
+          is_best = True
+      logging.info('valid_acc_top1 %f, valid_acc_top5 %f, best_acc_top1 %f, best_acc_top1 %f', valid_acc_top1, valid_acc_top5, best_acc_top1, best_acc_top5)
 
+    # モデルを保存
     utils.save(model, os.path.join(args.save, 'weights.pt'))
     utils.save_genotype(genotype, os.path.join(args.save, 'genotype.pt'))
     logging.info('model saved at' % args.save)
@@ -186,8 +195,9 @@ def infer(valid_queue, model, criterion):
     #target = target.cuda(non_blocking=True)
     input = Variable(input, volatile=True).cuda()
     target = Variable(target, volatile=True).cuda(non_blocking=True)
-    logits = model(input)
-    loss = criterion(logits, target)
+    with torch.no_grad():
+      logits = model(input)
+      loss = criterion(logits, target)
 
     prec1, prec5 = utils.accuracy(logits, target, topk=(1, 5))
     n = input.size(0)
@@ -198,7 +208,7 @@ def infer(valid_queue, model, criterion):
     if step % args.report_freq == 0:
       logging.info('valid %03dsteps %eobjs.avg %ftop1.avg %ftop5.avg', step, objs.avg, top1.avg, top5.avg)
 
-  return top1.avg, objs.avg
+  return top1.avg, top5.avg, objs.avg
 
 
 if __name__ == '__main__':

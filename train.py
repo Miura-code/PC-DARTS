@@ -120,7 +120,7 @@ def main():
     if valid_acc_top1 > best_acc_top1:
         best_acc_top1 = valid_acc_top1
         is_best = True
-    logging.info('valid_acc_top1 %f, valid_acc_top5 %f, best_acc_top1 %f', valid_acc_top1, valid_acc_top5, best_acc_top1)
+    logging.info('valid_acc_top1 %f, valid_acc_top5 %f, best_acc_top1 %f, best_acc_top1 %f', valid_acc_top1, valid_acc_top5, best_acc_top1, best_acc_top5)
 
     utils.save(model, os.path.join(args.save, 'weights.pt'))
     logging.info('model saved at' % args.save)
