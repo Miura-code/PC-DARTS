@@ -1,0 +1,7 @@
+2023-12-05 15:52:07,177 gpu device = 0
+2023-12-05 15:52:07,177 args = Namespace(data='/home/miura/lab/data', batch_size=96, report_freq=50, gpu=0, init_channels=36, layers=20, model_path='../weights.pt', auxiliary=True, cutout=True, cutout_length=16, drop_path_prob=0.2, seed=0, arch='SEARCHED')
+2023-12-05 15:52:07,650 param size = 3.800998MB
+2023-12-05 15:52:08,609 test 000 5.893784e-02 97.916664 100.000000
+2023-12-05 15:52:11,554 test 050 1.277456e-01 96.813723 99.918300
+2023-12-05 15:52:14,473 test 100 1.178562e-01 97.060641 99.917491
+2023-12-05 15:52:14,865 test_acc 97.029997
