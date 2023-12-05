@@ -81,6 +81,9 @@ class Cell(nn.Module):
 
     states = [s0, s1]
     offset = 0
+    """ 各内部ノードに対して演算結果を足し合わせる。
+    Edge Normalizationを行う。
+    eq:2 in paper"""
     for i in range(self._steps):
       s = sum(weights2[offset+j]*self._ops[offset+j](h, weights[offset+j]) for j, h in enumerate(states))
       offset += len(states)
@@ -166,6 +169,10 @@ class Network(nn.Module):
     return self._criterion(logits, target) 
 
   def _initialize_alphas(self):
+    """ arch パラメータalpha,betaを初期化
+        k:セル内のエッジの数
+        num_ops:候補演算の数
+    """
     k = sum(1 for i in range(self._steps) for n in range(2+i))
     num_ops = len(PRIMITIVES)
 
@@ -186,6 +193,9 @@ class Network(nn.Module):
   def genotype(self):
 
     def _parse(weights,weights2):
+      # print("weights:", weights.shape)
+      # >> "weights: (14, 8)"
+
       gene = []
       n = 2
       start = 0
@@ -208,6 +218,7 @@ class Network(nn.Module):
         start = end
         n += 1
       return gene
+    
     n = 3
     start = 2
     weightsr2 = F.softmax(self.betas_reduce[0:2], dim=-1)
@@ -220,6 +231,7 @@ class Network(nn.Module):
       n += 1
       weightsr2 = torch.cat([weightsr2,tw2],dim=0)
       weightsn2 = torch.cat([weightsn2,tn2],dim=0)
+
     gene_normal = _parse(F.softmax(self.alphas_normal, dim=-1).data.cpu().numpy(),weightsn2.data.cpu().numpy())
     gene_reduce = _parse(F.softmax(self.alphas_reduce, dim=-1).data.cpu().numpy(),weightsr2.data.cpu().numpy())
 

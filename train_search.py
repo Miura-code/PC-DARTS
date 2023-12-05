@@ -20,7 +20,7 @@ from architect import Architect
 
 
 parser = argparse.ArgumentParser("cifar")
-parser.add_argument('--data', type=str, default='../data', help='location of the data corpus')
+parser.add_argument('--data', type=str, default='/home/miura/lab/data', help='location of the data corpus')
 parser.add_argument('--set', type=str, default='cifar10', help='location of the data corpus')
 parser.add_argument('--batch_size', type=int, default=256, help='batch size')
 parser.add_argument('--learning_rate', type=float, default=0.1, help='init learning rate')
@@ -110,6 +110,8 @@ def main():
 
   architect = Architect(model, args)
 
+  best_acc_top1 = 0.0
+  best_acc_top5 = 0.0
   for epoch in tqdm(range(args.epochs)):
     scheduler.step()
     lr = scheduler.get_lr()[0]
@@ -118,19 +120,25 @@ def main():
     genotype = model.genotype()
     logging.info('genotype = %s', genotype)
 
-    #print(F.softmax(model.alphas_normal, dim=-1))
-    #print(F.softmax(model.alphas_reduce, dim=-1))
-
     # training
     train_acc, train_obj = train(train_queue, valid_queue, model, architect, criterion, optimizer, lr,epoch)
     logging.info('train_acc %f', train_acc)
 
     # validation
     if args.epochs-epoch<=1:
-      valid_acc, valid_obj = infer(valid_queue, model, criterion)
-      logging.info('valid_acc %f', valid_acc)
+      valid_acc_top1, valid_acc_top5, valid_obj = infer(valid_queue, model, criterion)
+      is_best = False
+      if valid_acc_top5 > best_acc_top5:
+          best_acc_top5 = valid_acc_top5
+      if valid_acc_top1 > best_acc_top1:
+          best_acc_top1 = valid_acc_top1
+          is_best = True
+      logging.info('valid_acc_top1 %f, valid_acc_top5 %f, best_acc_top1 %f, best_acc_top1 %f', valid_acc_top1, valid_acc_top5, best_acc_top1, best_acc_top5)
 
+    # モデルを保存
     utils.save(model, os.path.join(args.save, 'weights.pt'))
+    utils.save_genotype(genotype, os.path.join(args.save, 'genotype.pt'))
+    logging.info('model saved at' % args.save)
 
 
 def train(train_queue, valid_queue, model, architect, criterion, optimizer, lr,epoch):
@@ -145,12 +153,12 @@ def train(train_queue, valid_queue, model, architect, criterion, optimizer, lr,e
     target = Variable(target, requires_grad=False).cuda(non_blocking=True)
 
     # get a random minibatch from the search queue with replacement
-    input_search, target_search = next(iter(valid_queue))
-    #try:
-    #  input_search, target_search = next(valid_queue_iter)
-    #except:
-    #  valid_queue_iter = iter(valid_queue)
-    #  input_search, target_search = next(valid_queue_iter)
+    # input_search, target_search = next(iter(valid_queue))
+    try:
+     input_search, target_search = next(valid_queue_iter)
+    except:
+     valid_queue_iter = iter(valid_queue)
+     input_search, target_search = next(valid_queue_iter)
     input_search = Variable(input_search, requires_grad=False).cuda()
     target_search = Variable(target_search, requires_grad=False).cuda(non_blocking=True)
 
@@ -187,8 +195,9 @@ def infer(valid_queue, model, criterion):
     #target = target.cuda(non_blocking=True)
     input = Variable(input, volatile=True).cuda()
     target = Variable(target, volatile=True).cuda(non_blocking=True)
-    logits = model(input)
-    loss = criterion(logits, target)
+    with torch.no_grad():
+      logits = model(input)
+      loss = criterion(logits, target)
 
     prec1, prec5 = utils.accuracy(logits, target, topk=(1, 5))
     n = input.size(0)
@@ -199,7 +208,7 @@ def infer(valid_queue, model, criterion):
     if step % args.report_freq == 0:
       logging.info('valid %03dsteps %eobjs.avg %ftop1.avg %ftop5.avg', step, objs.avg, top1.avg, top5.avg)
 
-  return top1.avg, objs.avg
+  return top1.avg, top5.avg, objs.avg
 
 
 if __name__ == '__main__':

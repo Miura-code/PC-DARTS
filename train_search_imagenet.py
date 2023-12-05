@@ -36,7 +36,7 @@ parser.add_argument('--model_path', type=str, default='saved_models', help='path
 parser.add_argument('--cutout', action='store_true', default=False, help='use cutout')
 parser.add_argument('--cutout_length', type=int, default=16, help='cutout length')
 parser.add_argument('--drop_path_prob', type=float, default=0.3, help='drop path probability')
-parser.add_argument('--save', type=str, default='/tmp/checkpoints/', help='experiment name')
+parser.add_argument('--save', type=str, default='IMAGENET_EXP', help='experiment name')
 parser.add_argument('--seed', type=int, default=2, help='random seed')
 parser.add_argument('--grad_clip', type=float, default=5, help='gradient clipping')
 parser.add_argument('--unrolled', action='store_true', default=False, help='use one-step unrolled validation loss')
@@ -49,7 +49,7 @@ parser.add_argument('--note', type=str, default='try', help='note for this run')
 
 args = parser.parse_args()
 
-args.save = '{}search-{}-{}'.format(args.save, args.note, time.strftime("%Y%m%d-%H%M%S"))
+args.save = 'search-{}-{}-{}'.format(args.save, args.note, time.strftime("%Y%m%d-%H%M%S"))
 utils.create_exp_dir(args.save, scripts_to_save=glob.glob('*.py'))
 
 log_format = '%(asctime)s %(message)s'
@@ -173,7 +173,9 @@ def main():
             logging.info('Valid_acc %f', valid_acc)
             #logging.info('Test_acc %f', test_acc)
 
-        #utils.save(model, os.path.join(args.save, 'weights.pt'))
+        # utils.save(model, os.path.join(args.save, 'weights.pt'))
+        # utils.save_genotype(genotype, os.path.join(args.save, 'genotype.pt'))
+        # logging.info('model saved at' % args.save)
 
 def train(train_queue, valid_queue, model, optimizer, optimizer_a, criterion, lr,epoch):
     objs = utils.AvgrageMeter()
