@@ -125,7 +125,7 @@ def main():
 
     utils.save(model, os.path.join(args.save, 'weights.pt'))
     utils.save_genotype(genotype, os.path.join(args.save, 'genotype.pt'))
-    logging.info('model saved at' % args.save)
+    logging.info('model saved at %s' % args.save)
 
 def train(train_queue, model, criterion, optimizer):
   objs = utils.AvgrageMeter()
