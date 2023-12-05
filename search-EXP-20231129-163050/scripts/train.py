@@ -7,12 +7,12 @@ import torch
 import utils
 import logging
 import argparse
-import tqdm
 import torch.nn as nn
 import genotypes
 import torch.utils
 import torchvision.datasets as dset
 import torch.backends.cudnn as cudnn
+from tqdm import tqdm
 
 from torch.autograd import Variable
 from model import NetworkCIFAR as Network
@@ -107,6 +107,7 @@ def main():
   best_acc_top1 = 0.0
   best_acc_top5 = 0.0
   for epoch in tqdm(range(args.epochs)):
+
     scheduler.step()
     logging.info('epoch %d lr %e', epoch, scheduler.get_lr()[0])
     model.drop_path_prob = args.drop_path_prob * epoch / args.epochs
@@ -124,7 +125,7 @@ def main():
     logging.info('valid_acc_top1 %f, valid_acc_top5 %f, best_acc_top1 %f, best_acc_top1 %f', valid_acc_top1, valid_acc_top5, best_acc_top1, best_acc_top5)
 
     utils.save(model, os.path.join(args.save, 'weights.pt'))
-    logging.info('model saved at' % args.save)
+    logging.info('model saved at %s' % args.save)
 
 def train(train_queue, model, criterion, optimizer):
   objs = utils.AvgrageMeter()
