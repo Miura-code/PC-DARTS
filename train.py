@@ -7,7 +7,7 @@ import torch
 import utils
 import logging
 import argparse
-import tqdm
+from tqdm import tqdm
 import torch.nn as nn
 import genotypes
 import torch.utils
