@@ -1,9 +1,15 @@
 import os
+import sys
 import numpy as np
 import torch
 import shutil
+import random
+import logging
+
 import torchvision.transforms as transforms
 from torch.autograd import Variable
+import torch.backends.cudnn as cudnn
+
 
 
 class AvgrageMeter(object):
@@ -111,7 +117,6 @@ def drop_path(x, drop_prob):
 def create_exp_dir(path, scripts_to_save=None):
   if not os.path.exists(path):
     os.mkdir(path)
-  print('Experiment dir : {}'.format(path))
 
   if scripts_to_save is not None:
     os.mkdir(os.path.join(path, 'scripts'))
@@ -121,3 +126,23 @@ def create_exp_dir(path, scripts_to_save=None):
 
 def save_genotype(genotype, save_path):
   torch.save(genotype, save_path)
+
+def set_seed_gpu(seed, gpu):
+  random.seed(seed)
+  os.environ['PYTHONHASHSEED'] = str(seed)
+  np.random.seed(seed)
+  torch.manual_seed(seed)
+  torch.cuda.manual_seed(seed)
+  torch.backends.cudnn.deterministic = True
+
+  torch.cuda.set_device(gpu)
+  cudnn.benchmark = True
+  cudnn.enabled=True
+
+def log_setting(save):
+  log_format = '%(asctime)s %(message)s'
+  logging.basicConfig(stream=sys.stdout, level=logging.INFO,
+      format=log_format, datefmt='%m/%d %I:%M:%S %p')
+  fh = logging.FileHandler(os.path.join(save, 'log.txt'))
+  fh.setFormatter(logging.Formatter(log_format))
+  logging.getLogger().addHandler(fh)

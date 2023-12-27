@@ -5,6 +5,8 @@ import sys
 
 Genotype = namedtuple('Genotype', 'normal normal_concat reduce reduce_concat')
 
+""" normal_concat, reduce_concat:セルの出力のために連結するノードのindex """
+
 PRIMITIVES = [
     'none',
     'max_pool_3x3',
@@ -14,6 +16,16 @@ PRIMITIVES = [
     'sep_conv_5x5',
     'dil_conv_3x3',
     'dil_conv_5x5'
+]
+
+Genotype_list = [
+  "NASNet",
+  "AmoebaNet",
+  "DARTS_V1",
+  "DARTS_V2",
+  "PC_DARTS_cifar",
+  "PC_DARTS_image",
+  "PCDARTS",
 ]
 
 NASNet = Genotype(
@@ -106,4 +118,16 @@ PC_DARTS_image = Genotype(normal=[('skip_connect', 1), ('sep_conv_3x3', 0), ('se
 
 PCDARTS = PC_DARTS_cifar
 
-SEARCHED = torch.load("../genotype.pt") if os.path.isfile("../genotype.pt") else sys.exit(1)
+SEARCED = None
+
+def load_genotype(arch, path=None):
+  """ genotypeを返す関数。arch=SEARCHEDなら保存済みのgenotype.ptをロードして返す。
+   pathが見つからない場合はSEARCHED=Noneを返す。 """
+  if arch in Genotype_list:
+    return eval("%s" % arch)
+  
+  elif arch == "SEARCHED" and path != None:
+    if os.path.isfile(path + "/genotype.pt"):
+      SEARCHED = torch.load(path + "/genotype.pt")
+
+  return SEARCHED
