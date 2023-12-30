@@ -139,7 +139,7 @@ def set_seed_gpu(seed, gpu):
   cudnn.benchmark = True
   cudnn.enabled=True
 
-def log_setting(save):
+def log_setting(save=""):
   log_format = '%(asctime)s %(message)s'
   logging.basicConfig(stream=sys.stdout, level=logging.INFO,
       format=log_format, datefmt='%m/%d %I:%M:%S %p')
