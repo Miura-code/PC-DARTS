@@ -1,0 +1,8 @@
+2024-01-04 00:59:50,097 gpu device = 0
+2024-01-04 00:59:50,097 args = Namespace(data='/home/miura/lab/data', set='cifar10', batch_size=96, report_freq=50, gpu=0, init_channels=36, layers=18, model_path='/home/miura/lab/PC-DARTS/search-EXP-20231226-193209/eval-L=18-20231231-052700/weights.pt', auxiliary=True, cutout=False, cutout_length=16, drop_path_prob=0.2, save='/home/miura/lab/PC-DARTS/search-EXP-20231226-193209/eval-L=18-20231231-052700', seed=0, arch='SEARCHED', arch_path='/home/miura/lab/PC-DARTS/search-EXP-20231226-193209/eval-L=18-20231231-052700')
+2024-01-04 00:59:50,097 genotype = Genotype(normal=[('sep_conv_3x3', 0), ('sep_conv_3x3', 1), ('sep_conv_3x3', 0), ('dil_conv_5x5', 1), ('sep_conv_3x3', 0), ('skip_connect', 1), ('skip_connect', 1), ('max_pool_3x3', 0)], normal_concat=range(2, 6), reduce=[('sep_conv_5x5', 0), ('avg_pool_3x3', 1), ('sep_conv_5x5', 2), ('sep_conv_5x5', 0), ('sep_conv_3x3', 0), ('skip_connect', 2), ('sep_conv_5x5', 2), ('sep_conv_3x3', 3)], reduce_concat=range(2, 6))
+2024-01-04 00:59:50,814 param size = 2.914534MB
+2024-01-04 00:59:52,105 test 000 1.168855e-01 92.708328 100.000000
+2024-01-04 00:59:54,579 test 050 1.411337e-01 95.853756 99.775326
+2024-01-04 00:59:57,021 test 100 1.333464e-01 95.915839 99.865924
+2024-01-04 00:59:57,324 test_acc 95.899997
