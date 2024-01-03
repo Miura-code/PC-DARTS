@@ -6,3 +6,6 @@
 2023-12-30 20:19:10,020 test 050 1.518311e-01 95.261435 99.918300
 2023-12-30 20:19:12,261 test 100 1.407435e-01 95.658001 99.927805
 2023-12-30 20:19:12,540 test_acc 95.639997
+2024-01-03 17:06:23,728 gpu device = 0
+2024-01-03 17:06:23,728 args = Namespace(data='/home/miura/lab/data', set='cifar10', batch_size=96, report_freq=50, gpu=0, init_channels=36, layers=4, model_path='/home/miura/lab/PC-DARTS/search-EXP-20231226-193209/eval-L=17-20231230-011229/weights.pt', auxiliary=True, cutout=False, cutout_length=16, drop_path_prob=0.2, save='/home/miura/lab/PC-DARTS/search-EXP-20231226-193209/eval-L=17-20231230-011229', seed=0, arch='SEARCHED', arch_path='/home/miura/lab/PC-DARTS/search-EXP-20231226-193209/eval-L=17-20231230-011229')
+2024-01-03 17:06:23,729 genotype = Genotype(normal=[('sep_conv_3x3', 0), ('sep_conv_3x3', 1), ('sep_conv_3x3', 0), ('dil_conv_5x5', 1), ('sep_conv_3x3', 0), ('skip_connect', 1), ('skip_connect', 1), ('max_pool_3x3', 0)], normal_concat=range(2, 6), reduce=[('sep_conv_5x5', 0), ('avg_pool_3x3', 1), ('sep_conv_5x5', 2), ('sep_conv_5x5', 0), ('sep_conv_3x3', 0), ('skip_connect', 2), ('sep_conv_5x5', 2), ('sep_conv_3x3', 3)], reduce_concat=range(2, 6))
