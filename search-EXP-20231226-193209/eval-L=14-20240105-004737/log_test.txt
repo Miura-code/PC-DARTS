@@ -1,0 +1,16 @@
+2024-01-05 04:01:50,868 gpu device = 0
+2024-01-05 04:01:50,868 args = Namespace(data='/home/miura/lab/data', set='cifar10', batch_size=96, report_freq=50, gpu=0, init_channels=36, layers=14, model_path='/home/miura/lab/PC-DARTS/search-EXP-20231226-193209/eval-L=14-20240105-004737/weights.pt', auxiliary=True, cutout=False, cutout_length=16, drop_path_prob=0.2, save='/home/miura/lab/PC-DARTS/search-EXP-20231226-193209/eval-L=14-20240105-004737', seed=0, arch='SEARCHED', arch_path='/home/miura/lab/PC-DARTS/search-EXP-20231226-193209/eval-L=14-20240105-004737')
+2024-01-05 04:01:50,868 genotype = Genotype(normal=[('sep_conv_3x3', 0), ('sep_conv_3x3', 1), ('sep_conv_3x3', 0), ('dil_conv_5x5', 1), ('sep_conv_3x3', 0), ('skip_connect', 1), ('skip_connect', 1), ('max_pool_3x3', 0)], normal_concat=range(2, 6), reduce=[('sep_conv_5x5', 0), ('avg_pool_3x3', 1), ('sep_conv_5x5', 2), ('sep_conv_5x5', 0), ('sep_conv_3x3', 0), ('skip_connect', 2), ('sep_conv_5x5', 2), ('sep_conv_3x3', 3)], reduce_concat=range(2, 6))
+2024-01-05 04:01:51,551 param size = 2.395558MB
+2024-01-05 04:01:52,876 test 000 1.659356e-01 95.833328 100.000000
+2024-01-05 04:01:54,804 test 050 1.604812e-01 95.241010 99.857026
+2024-01-05 04:01:56,705 test 100 1.458196e-01 95.719882 99.886551
+2024-01-05 04:01:56,943 test_acc 95.659997
+2024-01-07 04:37:08,817 gpu device = 0
+2024-01-07 04:37:08,818 args = Namespace(data='/home/miura/lab/data', set='cifar10', batch_size=96, report_freq=50, gpu=0, init_channels=36, layers=14, model_path='/home/miura/lab/PC-DARTS/search-EXP-20231226-193209/eval-L=14-20240105-004737/weights.pt', auxiliary=True, cutout=False, cutout_length=16, drop_path_prob=0.2, save='/home/miura/lab/PC-DARTS/search-EXP-20231226-193209/eval-L=14-20240105-004737', seed=0, arch='SEARCHED', arch_path='/home/miura/lab/PC-DARTS/search-EXP-20231226-193209/eval-L=14-20240105-004737')
+2024-01-07 04:37:08,818 genotype = Genotype(normal=[('sep_conv_3x3', 0), ('sep_conv_3x3', 1), ('sep_conv_3x3', 0), ('dil_conv_5x5', 1), ('sep_conv_3x3', 0), ('skip_connect', 1), ('skip_connect', 1), ('max_pool_3x3', 0)], normal_concat=range(2, 6), reduce=[('sep_conv_5x5', 0), ('avg_pool_3x3', 1), ('sep_conv_5x5', 2), ('sep_conv_5x5', 0), ('sep_conv_3x3', 0), ('skip_connect', 2), ('sep_conv_5x5', 2), ('sep_conv_3x3', 3)], reduce_concat=range(2, 6))
+2024-01-07 04:37:09,524 param size = 2.395558MB
+2024-01-07 04:37:10,830 test 000 1.659356e-01 95.833328 100.000000
+2024-01-07 04:37:12,750 test 050 1.604812e-01 95.241010 99.857026
+2024-01-07 04:37:14,650 test 100 1.458196e-01 95.719882 99.886551
+2024-01-07 04:37:14,896 test_acc 95.659997

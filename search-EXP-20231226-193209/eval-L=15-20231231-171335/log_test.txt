@@ -6,3 +6,19 @@
 2024-01-04 00:59:06,980 test 050 1.510514e-01 95.547383 99.877451
 2024-01-04 00:59:09,038 test 100 1.395962e-01 95.761136 99.896864
 2024-01-04 00:59:09,300 test_acc 95.779997
+2024-01-05 04:02:05,767 gpu device = 0
+2024-01-05 04:02:05,767 args = Namespace(data='/home/miura/lab/data', set='cifar10', batch_size=96, report_freq=50, gpu=0, init_channels=36, layers=15, model_path='/home/miura/lab/PC-DARTS/search-EXP-20231226-193209/eval-L=15-20231231-171335/weights.pt', auxiliary=True, cutout=False, cutout_length=16, drop_path_prob=0.2, save='/home/miura/lab/PC-DARTS/search-EXP-20231226-193209/eval-L=15-20231231-171335', seed=0, arch='SEARCHED', arch_path='/home/miura/lab/PC-DARTS/search-EXP-20231226-193209/eval-L=15-20231231-171335')
+2024-01-05 04:02:05,768 genotype = Genotype(normal=[('sep_conv_3x3', 0), ('sep_conv_3x3', 1), ('sep_conv_3x3', 0), ('dil_conv_5x5', 1), ('sep_conv_3x3', 0), ('skip_connect', 1), ('skip_connect', 1), ('max_pool_3x3', 0)], normal_concat=range(2, 6), reduce=[('sep_conv_5x5', 0), ('avg_pool_3x3', 1), ('sep_conv_5x5', 2), ('sep_conv_5x5', 0), ('sep_conv_3x3', 0), ('skip_connect', 2), ('sep_conv_5x5', 2), ('sep_conv_3x3', 3)], reduce_concat=range(2, 6))
+2024-01-05 04:02:06,463 param size = 2.421874MB
+2024-01-05 04:02:07,782 test 000 1.491661e-01 94.791664 100.000000
+2024-01-05 04:02:09,909 test 050 1.510514e-01 95.547383 99.877451
+2024-01-05 04:02:12,006 test 100 1.395962e-01 95.761136 99.896864
+2024-01-05 04:02:12,276 test_acc 95.779997
+2024-01-07 04:37:31,066 gpu device = 0
+2024-01-07 04:37:31,066 args = Namespace(data='/home/miura/lab/data', set='cifar10', batch_size=96, report_freq=50, gpu=0, init_channels=36, layers=15, model_path='/home/miura/lab/PC-DARTS/search-EXP-20231226-193209/eval-L=15-20231231-171335/weights.pt', auxiliary=True, cutout=False, cutout_length=16, drop_path_prob=0.2, save='/home/miura/lab/PC-DARTS/search-EXP-20231226-193209/eval-L=15-20231231-171335', seed=0, arch='SEARCHED', arch_path='/home/miura/lab/PC-DARTS/search-EXP-20231226-193209/eval-L=15-20231231-171335')
+2024-01-07 04:37:31,067 genotype = Genotype(normal=[('sep_conv_3x3', 0), ('sep_conv_3x3', 1), ('sep_conv_3x3', 0), ('dil_conv_5x5', 1), ('sep_conv_3x3', 0), ('skip_connect', 1), ('skip_connect', 1), ('max_pool_3x3', 0)], normal_concat=range(2, 6), reduce=[('sep_conv_5x5', 0), ('avg_pool_3x3', 1), ('sep_conv_5x5', 2), ('sep_conv_5x5', 0), ('sep_conv_3x3', 0), ('skip_connect', 2), ('sep_conv_5x5', 2), ('sep_conv_3x3', 3)], reduce_concat=range(2, 6))
+2024-01-07 04:37:31,776 param size = 2.421874MB
+2024-01-07 04:37:33,130 test 000 1.491661e-01 94.791664 100.000000
+2024-01-07 04:37:35,256 test 050 1.510514e-01 95.547383 99.877451
+2024-01-07 04:37:37,355 test 100 1.395962e-01 95.761136 99.896864
+2024-01-07 04:37:37,635 test_acc 95.779997
