@@ -26,6 +26,7 @@ Genotype_list = [
   "PC_DARTS_cifar",
   "PC_DARTS_image",
   "PCDARTS",
+  "CASCADE_SIMPLE",
 ]
 
 NASNet = Genotype(
@@ -118,16 +119,41 @@ PC_DARTS_image = Genotype(normal=[('skip_connect', 1), ('sep_conv_3x3', 0), ('se
 
 PCDARTS = PC_DARTS_cifar
 
-SEARCED = None
+CASCADE_SIMPLE = Genotype(
+    normal=[
+        ('none', 0), 
+        ('sep_conv_3x3', 0), 
+        ('skip_connect', 0), 
+        ('avg_pool_3x3', 1), 
+        ('skip_connect', 1), 
+        ('sep_conv_5x5', 2), 
+        ('skip_connect', 2), 
+        ('avg_pool_3x3', 3)
+    ],
+    normal_concat=range(1, 5), 
+    reduce=[
+        ('none', 0), 
+        ('sep_conv_3x3', 0), 
+        ('skip_connect', 0), 
+        ('avg_pool_3x3', 1), 
+        ('skip_connect', 1), 
+        ('sep_conv_5x5', 2), 
+        ('skip_connect', 2), 
+        ('avg_pool_3x3', 3)
+    ], 
+    reduce_concat=range(1, 5)
+)
 
 def load_genotype(arch, path=None):
   """ genotypeを返す関数。arch=SEARCHEDなら保存済みのgenotype.ptをロードして返す。
    pathが見つからない場合はSEARCHED=Noneを返す。 """
+  SEARCHED = None
+
   if arch in Genotype_list:
     return eval("%s" % arch)
-  
   elif arch == "SEARCHED" and path != None:
-    if os.path.isfile(path + "/genotype.pt"):
-      SEARCHED = torch.load(path + "/genotype.pt")
+    if os.path.isfile(os.path.join(path, "genotype.pt")):
+      SEARCHED = torch.load(os.path.join(path, "genotype.pt"))
+  print(os.path.join(path, "genotype.pt"))
 
   return SEARCHED
